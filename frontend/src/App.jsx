@@ -1,0 +1,95 @@
+import React, { useState } from 'react';
+import './App.css';
+
+function App() {
+  const [threatLevel, setThreatLevel] = useState(null);
+  const [sosActive, setSosActive] = useState(false);
+  const [audioTranscript, setAudioTranscript] = useState('');
+
+  const triggerSOS = async () => {
+    setSosActive(true);
+    try {
+      const response = await fetch('http://localhost:8000/api/sos', { method: 'POST' });
+      const data = await response.json();
+      alert(data.message);
+    } catch (err) {
+      console.error(err);
+      alert('Error triggering SOS. Make sure Python Backend is running on port 8000.');
+    }
+    setTimeout(() => setSosActive(false), 3000);
+  };
+
+  const simulateAudioThreat = async () => {
+    const text = audioTranscript || "Help me, someone is following me!";
+    try {
+      const response = await fetch('http://localhost:8000/api/detect-threat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text })
+      });
+      const data = await response.json();
+      setThreatLevel(data.analysis);
+      if (data.analysis.action === 'TRIGGER_SOS') {
+        triggerSOS();
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Failed to connect to backend. Make sure it is running.');
+    }
+  };
+
+  return (
+    <div className="app-container">
+      <header className="glass-header">
+        <h1>🛡️ SheShield AI</h1>
+        <p>Your Shield of Safety</p>
+      </header>
+
+      <main className="dashboard">
+        <section className="card sos-section">
+          <h2>Emergency Response</h2>
+          <p>Press the button below if you are in immediate danger.</p>
+          <button 
+            className={`sos-btn ${sosActive ? 'active' : ''}`}
+            onClick={triggerSOS}
+          >
+            {sosActive ? 'SOS SENT' : 'QUICK SOS'}
+          </button>
+        </section>
+
+        <section className="card ai-section">
+          <h2>AI Threat Detection</h2>
+          <p>Simulate voice detection by typing a distress phrase.</p>
+          <div className="input-group">
+            <input 
+              type="text" 
+              placeholder="e.g. Help me, stop!"
+              value={audioTranscript}
+              onChange={(e) => setAudioTranscript(e.target.value)}
+            />
+            <button onClick={simulateAudioThreat}>Analyze</button>
+          </div>
+          
+          {threatLevel && (
+            <div className={`threat-result ${threatLevel.threat_level.toLowerCase()}`}>
+              <h3>Status: {threatLevel.threat_level}</h3>
+              <p>{threatLevel.reasoning}</p>
+            </div>
+          )}
+        </section>
+
+        <section className="card tools-section">
+          <h2>Preventive Tools</h2>
+          <div className="tools-grid">
+            <button className="tool-btn" onClick={() => alert('Fake call initiated...')}>📞 Fake Call</button>
+            <button className="tool-btn" onClick={() => alert('Opening safe map...')}>📍 Safety Map</button>
+            <button className="tool-btn" onClick={() => alert('Timer set for 5 mins...')}>⏱️ Checkup Timer</button>
+          </div>
+        </section>
+      </main>
+    </div>
+  );
+}
+
+export default App;
+
