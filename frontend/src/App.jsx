@@ -5,13 +5,14 @@ function App() {
   const [threatLevel, setThreatLevel] = useState(null);
   const [sosActive, setSosActive] = useState(false);
   const [audioTranscript, setAudioTranscript] = useState('');
+  const [contacts, setContacts] = useState(['Mom', 'Best Friend', 'Police']); // Added state
 
   const triggerSOS = async () => {
     setSosActive(true);
     try {
       const response = await fetch('http://localhost:8000/api/sos', { method: 'POST' });
       const data = await response.json();
-      alert(data.message);
+      alert(`${data.message}\nNotifying: ${contacts.join(', ')}`);
     } catch (err) {
       console.error(err);
       alert('Error triggering SOS. Make sure Python Backend is running on port 8000.');
@@ -79,11 +80,12 @@ function App() {
         </section>
 
         <section className="card tools-section">
-          <h2>Preventive Tools</h2>
+          <h2>Preventive Tools & Settings</h2>
           <div className="tools-grid">
             <button className="tool-btn" onClick={() => alert('Fake call initiated...')}>📞 Fake Call</button>
             <button className="tool-btn" onClick={() => alert('Opening safe map...')}>📍 Safety Map</button>
             <button className="tool-btn" onClick={() => alert('Timer set for 5 mins...')}>⏱️ Checkup Timer</button>
+            <button className="tool-btn" onClick={() => alert(`Current Contacts: ${contacts.join(', ')}`)}>👥 Contacts</button>
           </div>
         </section>
       </main>
