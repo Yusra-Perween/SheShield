@@ -33,6 +33,17 @@ def trigger_sos():
     # In a real app, this would integrate with Firebase to send SMS/Notifications
     return {"success": True, "message": "SOS protocol activated. Emergency contacts notified."}
 
+@app.get("/api/safe-zones")
+def get_safe_zones():
+    # Returns mocked data for safe zones like hospitals and police stations
+    return {
+        "success": True,
+        "zones": [
+            {"id": 1, "name": "City Center Police Station", "lat": 40.7128, "lng": -74.0060, "type": "police"},
+            {"id": 2, "name": "General Hospital", "lat": 40.7138, "lng": -74.0080, "type": "hospital"}
+        ]
+    }
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
