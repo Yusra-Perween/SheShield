@@ -20,6 +20,20 @@ function App() {
     setTimeout(() => setSosActive(false), 3000);
   };
 
+  const fetchSafeZones = async () => {
+    try {
+      const response = await fetch('http://localhost:8000/api/safe-zones');
+      const data = await response.json();
+      if (data.success) {
+        const zoneNames = data.zones.map(z => z.name).join(', ');
+        alert(`Found ${data.zones.length} safe zones nearby:\n${zoneNames}`);
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Could not fetch safe zones. Backend might be offline.');
+    }
+  };
+
   const simulateAudioThreat = async () => {
     const text = audioTranscript || "Help me, someone is following me!";
     try {
@@ -83,7 +97,7 @@ function App() {
           <h2>Preventive Tools & Settings</h2>
           <div className="tools-grid">
             <button className="tool-btn" onClick={() => alert('Fake call initiated...')}>📞 Fake Call</button>
-            <button className="tool-btn" onClick={() => alert('Opening safe map...')}>📍 Safety Map</button>
+            <button className="tool-btn" onClick={fetchSafeZones}>📍 Safety Map</button>
             <button className="tool-btn" onClick={() => alert('Timer set for 5 mins...')}>⏱️ Checkup Timer</button>
             <button className="tool-btn" onClick={() => alert(`Current Contacts: ${contacts.join(', ')}`)}>👥 Contacts</button>
           </div>
