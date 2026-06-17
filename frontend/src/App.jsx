@@ -6,6 +6,7 @@ function App() {
   const [sosActive, setSosActive] = useState(false);
   const [audioTranscript, setAudioTranscript] = useState('');
   const [contacts, setContacts] = useState(['Mom', 'Best Friend', 'Police']); // Added state
+  const [fakeCallActive, setFakeCallActive] = useState(false);
 
   const triggerSOS = async () => {
     setSosActive(true);
@@ -32,6 +33,14 @@ function App() {
       console.error(err);
       alert('Could not fetch safe zones. Backend might be offline.');
     }
+  };
+
+  const initiateFakeCall = () => {
+    alert('Fake call scheduled in 3 seconds...');
+    setTimeout(() => {
+      setFakeCallActive(true);
+      setTimeout(() => setFakeCallActive(false), 5000); // Call lasts 5 seconds
+    }, 3000);
   };
 
   const simulateAudioThreat = async () => {
@@ -96,7 +105,9 @@ function App() {
         <section className="card tools-section">
           <h2>Preventive Tools & Settings</h2>
           <div className="tools-grid">
-            <button className="tool-btn" onClick={() => alert('Fake call initiated...')}>📞 Fake Call</button>
+            <button className="tool-btn" onClick={initiateFakeCall}>
+              {fakeCallActive ? '📞 RINGING...' : '📞 Fake Call'}
+            </button>
             <button className="tool-btn" onClick={fetchSafeZones}>📍 Safety Map</button>
             <button className="tool-btn" onClick={() => alert('Timer set for 5 mins...')}>⏱️ Checkup Timer</button>
             <button className="tool-btn" onClick={() => alert(`Current Contacts: ${contacts.join(', ')}`)}>👥 Contacts</button>
