@@ -7,6 +7,7 @@ function App() {
   const [audioTranscript, setAudioTranscript] = useState('');
   const [contacts, setContacts] = useState(['Mom', 'Best Friend', 'Police']); // Added state
   const [fakeCallActive, setFakeCallActive] = useState(false);
+  const [timerSeconds, setTimerSeconds] = useState(0);
 
   const triggerSOS = async () => {
     setSosActive(true);
@@ -41,6 +42,20 @@ function App() {
       setFakeCallActive(true);
       setTimeout(() => setFakeCallActive(false), 5000); // Call lasts 5 seconds
     }, 3000);
+  };
+
+  const startTimer = () => {
+    setTimerSeconds(5); // 5 second demo timer
+    const interval = setInterval(() => {
+      setTimerSeconds((prev) => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          alert('Checkup Timer finished! Are you safe?');
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
   };
 
   const simulateAudioThreat = async () => {
@@ -109,7 +124,9 @@ function App() {
               {fakeCallActive ? '📞 RINGING...' : '📞 Fake Call'}
             </button>
             <button className="tool-btn" onClick={fetchSafeZones}>📍 Safety Map</button>
-            <button className="tool-btn" onClick={() => alert('Timer set for 5 mins...')}>⏱️ Checkup Timer</button>
+            <button className="tool-btn" onClick={startTimer}>
+              {timerSeconds > 0 ? `⏱️ ${timerSeconds}s remaining` : '⏱️ Checkup Timer'}
+            </button>
             <button className="tool-btn" onClick={() => alert(`Current Contacts: ${contacts.join(', ')}`)}>👥 Contacts</button>
           </div>
         </section>
