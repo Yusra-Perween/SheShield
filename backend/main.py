@@ -44,6 +44,19 @@ def get_safe_zones():
         ]
     }
 
+@app.get("/api/threat-logs")
+def get_threat_logs():
+    # Returns mocked historical threat data for the analytics dashboard
+    from datetime import datetime, timedelta
+    now = datetime.now()
+    return {
+        "success": True,
+        "logs": [
+            {"id": 1, "timestamp": (now - timedelta(days=1)).isoformat(), "threat_level": "HIGH", "action_taken": "SOS Triggered"},
+            {"id": 2, "timestamp": (now - timedelta(days=2)).isoformat(), "threat_level": "LOW", "action_taken": "Logged"},
+        ]
+    }
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
