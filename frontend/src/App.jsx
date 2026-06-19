@@ -58,6 +58,20 @@ function App() {
     }, 1000);
   };
 
+  const fetchThreatLogs = async () => {
+    try {
+      const response = await fetch('http://localhost:8000/api/threat-logs');
+      const data = await response.json();
+      if (data.success) {
+        const logsStr = data.logs.map(l => `Level: ${l.threat_level} | Action: ${l.action_taken}`).join('\n');
+        alert(`Recent Threat Logs:\n${logsStr}`);
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Could not fetch threat logs.');
+    }
+  };
+
   const simulateAudioThreat = async () => {
     const text = audioTranscript || "Help me, someone is following me!";
     try {
@@ -128,6 +142,7 @@ function App() {
               {timerSeconds > 0 ? `⏱️ ${timerSeconds}s remaining` : '⏱️ Checkup Timer'}
             </button>
             <button className="tool-btn" onClick={() => alert(`Current Contacts: ${contacts.join(', ')}`)}>👥 Contacts</button>
+            <button className="tool-btn" onClick={fetchThreatLogs}>📊 Safety Analytics</button>
           </div>
         </section>
       </main>
