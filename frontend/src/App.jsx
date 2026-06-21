@@ -143,6 +143,7 @@ function App() {
             </button>
             <button className="tool-btn" onClick={() => alert(`Current Contacts: ${contacts.join(', ')}`)}>👥 Contacts</button>
             <button className="tool-btn" onClick={fetchThreatLogs}>📊 Safety Analytics</button>
+            <button className="tool-btn" onClick={() => alert('Opening Self-Defense Video Guides...')}>🥋 Defense Guides</button>
           </div>
         </section>
       </main>
