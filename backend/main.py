@@ -57,6 +57,17 @@ def get_threat_logs():
         ]
     }
 
+@app.get("/api/guides")
+def get_defense_guides():
+    # Returns mocked data for self-defense guides and legal rights
+    return {
+        "success": True,
+        "guides": [
+            {"id": 1, "title": "Basic Self-Defense Moves", "type": "video", "duration": "5 mins"},
+            {"id": 2, "title": "Know Your Legal Rights", "type": "article", "duration": "10 mins read"}
+        ]
+    }
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
