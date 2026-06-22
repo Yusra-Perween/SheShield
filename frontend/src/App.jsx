@@ -58,6 +58,20 @@ function App() {
     }, 1000);
   };
 
+  const fetchGuides = async () => {
+    try {
+      const response = await fetch('http://localhost:8000/api/guides');
+      const data = await response.json();
+      if (data.success) {
+        const guidesStr = data.guides.map(g => `${g.title} (${g.type} - ${g.duration})`).join('\n');
+        alert(`Self-Defense Guides Available:\n\n${guidesStr}`);
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Could not fetch guides.');
+    }
+  };
+
   const fetchThreatLogs = async () => {
     try {
       const response = await fetch('http://localhost:8000/api/threat-logs');
@@ -143,7 +157,7 @@ function App() {
             </button>
             <button className="tool-btn" onClick={() => alert(`Current Contacts: ${contacts.join(', ')}`)}>👥 Contacts</button>
             <button className="tool-btn" onClick={fetchThreatLogs}>📊 Safety Analytics</button>
-            <button className="tool-btn" onClick={() => alert('Opening Self-Defense Video Guides...')}>🥋 Defense Guides</button>
+            <button className="tool-btn" onClick={fetchGuides}>🥋 Defense Guides</button>
           </div>
         </section>
       </main>
