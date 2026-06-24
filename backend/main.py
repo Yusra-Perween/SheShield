@@ -68,6 +68,11 @@ def get_defense_guides():
         ]
     }
 
+@app.get("/api/health")
+def health_check():
+    # Returns server health status
+    return {"status": "ok", "version": "1.0.0", "service": "SheShield AI"}
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
